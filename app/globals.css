@@ -1,0 +1,345 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Updated color palette to romantic pink/red theme */
+  --background: #ffebee; /* Pale pink background */
+  --foreground: #374151; /* Dark text for contrast */
+  --card: #f8e2e2; /* Light blush for cards */
+  --card-foreground: #ff6f61; /* Coral red for card text */
+  --popover: #ffb6c1; /* Light pink for popovers */
+  --popover-foreground: #374151; /* Dark text for contrast */
+  --primary: #ff6f61; /* Coral red for primary buttons */
+  --primary-foreground: #ffffff; /* White text on primary buttons */
+  --secondary: #f8e2e2; /* Light blush for secondary elements */
+  --secondary-foreground: #ff6f61; /* Coral red for secondary text */
+  --muted: #ffebee; /* Pale pink for muted elements */
+  --muted-foreground: #374151; /* Dark text for muted elements */
+  --accent: #ffb6c1; /* Light pink for accents */
+  --accent-foreground: #374151; /* Dark text for accent elements */
+  --destructive: #dc2626; /* Red for destructive actions */
+  --destructive-foreground: #ffffff; /* White text on destructive buttons */
+  --border: #ffb6c1; /* Light pink for borders */
+  --input: #ffffff; /* White for input fields */
+  --ring: #ffb6c1; /* Light pink for focus rings */
+  --chart-1: #ff6f61; /* Coral red for chart elements */
+  --chart-2: #ffb6c1; /* Light pink for secondary chart elements */
+  --chart-3: #f8e2e2; /* Light blush for tertiary chart elements */
+  --chart-4: #ffebee; /* Pale pink for additional chart elements */
+  --chart-5: #ffffff; /* White for the background of charts */
+  --radius: 0.5rem; /* Rounded corners for a softer appearance */
+  --sidebar: #f8e2e2; /* Light blush for sidebar background */
+  --sidebar-foreground: #ff6f61; /* Coral red for sidebar text */
+  --sidebar-primary: #ffffff; /* White for primary sidebar elements */
+  --sidebar-primary-foreground: #ff6f61; /* Coral red for primary sidebar text */
+  --sidebar-accent: #ffb6c1; /* Light pink for accent sidebar elements */
+  --sidebar-accent-foreground: #374151; /* Dark text for accent sidebar */
+  --sidebar-border: #ff6f61; /* Coral red for sidebar borders */
+  --sidebar-ring: #ffb6c1; /* Light pink for focus rings on sidebar */
+}
+
+.dark {
+  --background: #1a1a1a;
+  --foreground: #ffffff;
+  --card: #2a2a2a;
+  --card-foreground: #ff6f61;
+  --popover: #2a2a2a;
+  --popover-foreground: #ffffff;
+  --primary: #ff6f61;
+  --primary-foreground: #ffffff;
+  --secondary: #3a3a3a;
+  --secondary-foreground: #ffffff;
+  --muted: #3a3a3a;
+  --muted-foreground: #a1a1aa;
+  --accent: #ffb6c1;
+  --accent-foreground: #1a1a1a;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: #3a3a3a;
+  --input: #2a2a2a;
+  --ring: #ffb6c1;
+  --chart-1: #ff6f61;
+  --chart-2: #ffb6c1;
+  --chart-3: #f8e2e2;
+  --chart-4: #ffebee;
+  --chart-5: #2a2a2a;
+  --sidebar: #2a2a2a;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #ff6f61;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #3a3a3a;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #3a3a3a;
+  --sidebar-ring: #ffb6c1;
+}
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-handwritten: var(--font-handwritten);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Added custom romantic animations */
+@keyframes heartbeat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sparkle {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes glow {
+  0%,
+  100% {
+    text-shadow: 0 0 5px #ffb6c1;
+  }
+  50% {
+    text-shadow: 0 0 20px #ff6f61, 0 0 30px #ffb6c1;
+  }
+}
+
+/* Added falling hearts animation for love letter */
+@keyframes fallDown {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Added pulse animation for romantic elements */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Added wiggle animation for cute animations component */
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+}
+
+/* Added more romantic animations */
+@keyframes loveGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 10px rgba(255, 182, 193, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(255, 111, 97, 0.8), 0 0 40px rgba(255, 182, 193, 0.6);
+  }
+}
+
+@keyframes gentleBounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+.heartbeat {
+  animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+.float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.sparkle {
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+.glow-text {
+  animation: glow 2s ease-in-out infinite;
+}
+
+/* Added handwritten font class */
+.font-handwritten {
+  font-family: var(--font-handwritten);
+}
+
+/* Enhanced floating hearts with falling animation */
+.floating-hearts {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.floating-heart {
+  position: absolute;
+  color: #ff6f61;
+  font-size: 20px;
+  animation: floatUp 4s linear infinite;
+}
+
+.falling-heart {
+  position: absolute;
+  color: #ff6f61;
+  font-size: 16px;
+  animation: fallDown 3s linear infinite;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(100vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Added new animation classes */
+.animate-wiggle {
+  animation: wiggle 1s ease-in-out infinite;
+}
+
+.love-glow {
+  animation: loveGlow 2s ease-in-out infinite;
+}
+
+.gentle-bounce {
+  animation: gentleBounce 2s ease-in-out infinite;
+}
+
+.twinkle {
+  animation: twinkle 1.5s ease-in-out infinite;
+}
+
+/* Enhanced romantic hover effects */
+.romantic-hover {
+  transition: all 0.3s ease;
+}
+
+.romantic-hover:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+.romantic-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.romantic-transition:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(255, 111, 97, 0.2);
+}
