@@ -16,20 +16,28 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+ const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  try {
+    const res = await fetch(`${process.env.NEXT_APP_API_BASE_URL}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+    });
 
-    // Replace 'YourGirlfriendName' with her actual name
-    const correctUsername = "shubhangi"
-    const correctPassword = "panda"
-
-    if (username.toLowerCase() === correctUsername.toLowerCase() && password === correctPassword) {
-      onLogin(true)
+    const data = await res.json();
+    if (res.ok) {
+      onLogin(true);
     } else {
-      setError("Incorrect credentials. You are not my love. Who are you?")
-      setTimeout(() => setError(""), 3000)
+      setError(data.message || 'Login failed');
+      setTimeout(() => setError(''), 3000);
     }
+  } catch (err) {
+    setError('Server error. Try again later.');
+    setTimeout(() => setError(''), 3000);
   }
+};
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-100 via-red-50 to-pink-200 flex items-center justify-center p-4">

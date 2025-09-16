@@ -7,7 +7,7 @@ const quizQuestions = [
   {
     question: "What was our first date?",
     options: ["Coffee shop", "Movie theater", "Park walk", "Restaurant"],
-    correct: 0,
+    correct: 3,
   },
   {
     question: "What's my favorite thing about you?",
@@ -16,7 +16,7 @@ const quizQuestions = [
   },
   {
     question: "Where do we want to travel together?",
-    options: ["Paris", "Tokyo", "Bali", "Everywhere"],
+    options: ["Paris", "Kedarnath", "Jharkhand", "Everywhere"],
     correct: 3,
   },
 ]
