@@ -4,11 +4,26 @@ import { useState, useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight, Upload, X } from "lucide-react"
 
+interface Photo {
+  src: string;
+  alt: string;
+  caption: string;
+}
+
+interface UploadModalProps {
+  newPhoto: Photo;
+  setNewPhoto: React.Dispatch<React.SetStateAction<Photo>>;
+  isUploading: boolean;
+  closeModal: () => void;
+  handleUpload: (e: React.FormEvent) => void;
+  handleFileSelect: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
 export default function PhotoCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [photos, setPhotos] = useState([])
+  const [photos, setPhotos] = useState<Photo[]>([])
   const [showUploadModal, setShowUploadModal] = useState(false)
-  const [newPhoto, setNewPhoto] = useState({
+  const [newPhoto, setNewPhoto] = useState<Photo>({
     src: "",
     alt: "",
     caption: ""
@@ -53,8 +68,8 @@ export default function PhotoCarousel() {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % photos.length)
   }
 
-  const handleFileSelect = (e) => {
-    const file = e.target.files[0]
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
     if (!file) return
     
     // Check if file is an image
@@ -66,12 +81,12 @@ export default function PhotoCarousel() {
     // Convert to base64
     const reader = new FileReader()
     reader.onload = (e) => {
-      setNewPhoto(prev => ({ ...prev, src: e.target.result }))
+      setNewPhoto(prev => ({ ...prev, src: e.target?.result as string }))
     }
     reader.readAsDataURL(file)
   }
 
-  const handleUpload = async (e) => {
+  const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!newPhoto.src) {
       alert('Please select an image to upload')
@@ -225,7 +240,7 @@ function UploadModal({
   closeModal, 
   handleUpload, 
   handleFileSelect
-}) {
+}: UploadModalProps) {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl p-6 w-full max-w-md mx-4">
