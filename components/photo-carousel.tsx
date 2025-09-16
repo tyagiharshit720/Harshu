@@ -30,18 +30,17 @@ export default function PhotoCarousel() {
   })
   const [isUploading, setIsUploading] = useState(false)
 
-  // Fetch photos from API
+  const API_BASE_URL = "https://harshu-backend.onrender.com" // ✅ direct API URL
+
+  // Fetch photos
   const fetchPhotos = useCallback(async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/photos')
-      if (res.ok) {
-        const data = await res.json()
-        setPhotos(data)
-      } else {
-        console.error('Failed to fetch photos')
-      }
+      const res = await fetch(`${API_BASE_URL}/api/photos`)
+      if (!res.ok) throw new Error("Failed to fetch photos")
+      const data = await res.json()
+      setPhotos(data)
     } catch (error) {
-      console.error('Error fetching photos:', error)
+      console.error("Error fetching photos:", error)
     }
   }, [])
 
@@ -53,68 +52,43 @@ export default function PhotoCarousel() {
   useEffect(() => {
     if (photos.length > 1) {
       const timer = setInterval(() => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % photos.length)
+        setCurrentIndex(prev => (prev + 1) % photos.length)
       }, 4000)
-
       return () => clearInterval(timer)
     }
   }, [photos.length])
 
-  const goToPrevious = () => {
-    setCurrentIndex((prevIndex) => (prevIndex === 0 ? photos.length - 1 : prevIndex - 1))
-  }
-
-  const goToNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % photos.length)
-  }
+  const goToPrevious = () => setCurrentIndex(prev => prev === 0 ? photos.length - 1 : prev - 1)
+  const goToNext = () => setCurrentIndex(prev => (prev + 1) % photos.length)
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
-    
-    // Check if file is an image
-    if (!file.type.match('image.*')) {
-      alert('Please select an image file')
-      return
-    }
-    
-    // Convert to base64
+    if (!file.type.match("image.*")) return alert("Please select an image file")
+
     const reader = new FileReader()
-    reader.onload = (e) => {
-      setNewPhoto(prev => ({ ...prev, src: e.target?.result as string }))
-    }
+    reader.onload = (e) => setNewPhoto(prev => ({ ...prev, src: e.target?.result as string }))
     reader.readAsDataURL(file)
   }
 
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!newPhoto.src) {
-      alert('Please select an image to upload')
-      return
-    }
-    
+    if (!newPhoto.src) return alert("Please select an image to upload")
     setIsUploading(true)
-    
+
     try {
-      const res = await fetch('http://localhost:5000/api/photos/add', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const res = await fetch(`${API_BASE_URL}/api/photos/add`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newPhoto),
       })
-      
-      if (res.ok) {
-        await fetchPhotos()
-        setShowUploadModal(false)
-        setNewPhoto({ src: "", alt: "", caption: "" })
-      } else {
-        console.error('Failed to upload photo')
-        alert('Failed to upload photo. Please try again.')
-      }
+      if (!res.ok) throw new Error("Failed to upload photo")
+      await fetchPhotos()
+      setShowUploadModal(false)
+      setNewPhoto({ src: "", alt: "", caption: "" })
     } catch (error) {
-      console.error('Error uploading photo:', error)
-      alert('Error uploading photo. Please try again.')
+      console.error("Error uploading photo:", error)
+      alert("Error uploading photo. Please try again.")
     } finally {
       setIsUploading(false)
     }
@@ -132,10 +106,9 @@ export default function PhotoCarousel() {
         <Button onClick={() => setShowUploadModal(true)}>
           <Upload className="mr-2 h-4 w-4" /> Upload Photo
         </Button>
-        
-        {/* Upload Modal */}
+
         {showUploadModal && (
-          <UploadModal 
+          <UploadModal
             newPhoto={newPhoto}
             setNewPhoto={setNewPhoto}
             isUploading={isUploading}
@@ -150,18 +123,12 @@ export default function PhotoCarousel() {
 
   return (
     <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden border-4 border-pink-200">
-      {/* Upload Button */}
       <div className="absolute top-4 right-4 z-10">
-        <Button 
-          onClick={() => setShowUploadModal(true)} 
-          size="sm"
-          className="bg-pink-500 hover:bg-pink-600"
-        >
+        <Button onClick={() => setShowUploadModal(true)} size="sm" className="bg-pink-500 hover:bg-pink-600">
           <Upload className="mr-2 h-4 w-4" /> Add Photo
         </Button>
       </div>
 
-      {/* Main Image */}
       <div className="relative h-64 md:h-80 overflow-hidden">
         <img
           src={photos[currentIndex]?.src || "/placeholder.svg"}
@@ -170,7 +137,6 @@ export default function PhotoCarousel() {
           loading="lazy"
         />
 
-        {/* Navigation Buttons - Only show if there's more than one photo */}
         {photos.length > 1 && (
           <>
             <Button
@@ -181,7 +147,6 @@ export default function PhotoCarousel() {
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
-
             <Button
               onClick={goToNext}
               variant="outline"
@@ -194,14 +159,10 @@ export default function PhotoCarousel() {
         )}
       </div>
 
-      {/* Caption */}
-      <div className="p-4 bg-gradient-to-r from-pink-50 to-red-50">
-        <p className="text-center text-muted-foreground font-medium">
-          {photos[currentIndex]?.caption}
-        </p>
+      <div className="p-4 bg-gradient-to-r from-pink-50 to-red-50 text-center">
+        <p className="text-muted-foreground font-medium">{photos[currentIndex]?.caption}</p>
       </div>
 
-      {/* Dots Indicator - Only show if there's more than one photo */}
       {photos.length > 1 && (
         <div className="flex justify-center space-x-2 p-4">
           {photos.map((_, index) => (
@@ -216,10 +177,9 @@ export default function PhotoCarousel() {
           ))}
         </div>
       )}
-      
-      {/* Upload Modal */}
+
       {showUploadModal && (
-        <UploadModal 
+        <UploadModal
           newPhoto={newPhoto}
           setNewPhoto={setNewPhoto}
           isUploading={isUploading}
@@ -232,15 +192,7 @@ export default function PhotoCarousel() {
   )
 }
 
-// Separate modal component
-function UploadModal({ 
-  newPhoto, 
-  setNewPhoto, 
-  isUploading, 
-  closeModal, 
-  handleUpload, 
-  handleFileSelect
-}: UploadModalProps) {
+function UploadModal({ newPhoto, setNewPhoto, isUploading, closeModal, handleUpload, handleFileSelect }: UploadModalProps) {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl p-6 w-full max-w-md mx-4">
@@ -250,45 +202,37 @@ function UploadModal({
             <X className="h-4 w-4" />
           </Button>
         </div>
-        
+
         <form onSubmit={handleUpload} className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-1">Select Image</label>
-            <input 
-              type="file" 
-              accept="image/*"
-              onChange={handleFileSelect}
-              className="w-full p-2 border rounded"
-              required
-            />
+            <input type="file" accept="image/*" onChange={handleFileSelect} className="w-full p-2 border rounded" required />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium mb-1">Alt Text</label>
-            <input 
-              type="text" 
+            <input
+              type="text"
               value={newPhoto.alt}
-              onChange={(e) => setNewPhoto(prev => ({...prev, alt: e.target.value}))}
+              onChange={(e) => setNewPhoto(prev => ({ ...prev, alt: e.target.value }))}
               className="w-full p-2 border rounded"
               placeholder="Describe the image for accessibility"
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium mb-1">Caption</label>
-            <textarea 
+            <textarea
               value={newPhoto.caption}
-              onChange={(e) => setNewPhoto(prev => ({...prev, caption: e.target.value}))}
+              onChange={(e) => setNewPhoto(prev => ({ ...prev, caption: e.target.value }))}
               className="w-full p-2 border rounded"
               placeholder="Add a meaningful caption"
               rows={3}
             />
           </div>
-          
+
           <div className="flex justify-end space-x-2">
-            <Button type="button" variant="outline" onClick={closeModal}>
-              Cancel
-            </Button>
+            <Button type="button" variant="outline" onClick={closeModal}>Cancel</Button>
             <Button type="submit" disabled={isUploading}>
               {isUploading ? "Uploading..." : "Upload Photo"}
             </Button>
